@@ -29,7 +29,7 @@
     <ErrorReportUrl>http://www.qunect.com</ErrorReportUrl>
     <ProductName>QuNect Backup Console</ProductName>
     <PublisherName>QuNect</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -81,6 +81,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>85003B1A0BC0DC43B20B71903F37587C5617EA33</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestTimestampUrl>http://timestamp.digicert.com</ManifestTimestampUrl>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

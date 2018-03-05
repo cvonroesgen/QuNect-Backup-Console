@@ -4,7 +4,13 @@ Imports System.Text
 Imports System.Data.Odbc
 Imports System.Text.RegularExpressions
 Module Module1
+    Private Class qdbVersion
+        Public year As Integer
+        Public major As Integer
+        Public minor As Integer
+    End Class
 
+    Private qdbVer As qdbVersion = New qdbVersion
     Sub Main(ByVal arguments As String())
 
         If arguments.Length < 2 Then
@@ -25,8 +31,30 @@ Module Module1
             quNectConn.Dispose()
             Exit Sub
         End Try
+        Dim ver As String = quNectConn.ServerVersion
+        Dim m As Match = Regex.Match(ver, "\d+\.(\d+)\.(\d+)\.(\d+)")
+        qdbVer.year = CInt(m.Groups(1).Value)
+        qdbVer.major = CInt(m.Groups(2).Value)
+        qdbVer.minor = CInt(m.Groups(3).Value)
 
-        Dim stringSeparators() As String = {","}
+        Dim versionAdequate = True
+
+        If qdbVer.year < 18 Then
+            versionAdequate = False
+        Else
+            If qdbVer.major < 7 Then
+                versionAdequate = False
+            Else
+                If qdbVer.minor < 57 Then
+                    versionAdequate = False
+                End If
+            End If
+        End If
+        If Not versionAdequate Then
+            Console.WriteLine("Please upgrade to version x.18.7.57 or later of QuNect ODBC for QuickBase")
+            Return
+        End If
+        Dim stringSeparators() As String = {".", ","}
         Dim dbids() As String
         dbids = arguments(2).Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries)
 
@@ -42,7 +70,6 @@ Module Module1
         Else
             Console.WriteLine("Your tables have been backed up!")
         End If
-
     End Sub
     Private Function backupTable(ByVal dbName As String, ByVal dbid As String, ByVal quNectConn As OdbcConnection, folderPath As String) As Boolean
         'we need to get the schema of the table
